@@ -51,40 +51,6 @@ class MainActivity : AppCompatActivity() {
                }
 
             Picasso.get().load(response?.image).into(headerImageView)
-            //   } else {
-            //      Toast.makeText(this@MainActivity,"not success call to the network",Toast.LENGTH_SHORT).show()
-            //  }
-
-     //   CoroutineScope(Dispatchers.IO).launch {
-       //     try {
-          //      val response = NetworkLayer.apiClient.getCharacterById(3)
-          //      withContext(Dispatchers.Main) {
-           //         if (response.isSuccessful) {
-           //             val body = response.body()
-            //            body?.name
-
-                        //update the name if we have successful network call
-                  //      nameTextView.text = body?.name
-                   //     aliveTextView.text = body?.status
-                    //    speciesTextView.text = body?.species
-                    //    originTextView.text = body?.origin?.name
-
-                      //  if(body?.gender.equals("male", ignoreCase = true)){
-                      //      genderImageView.setImageResource(R.drawable.ic_male_24)
-                    //    } else {
-                    //        genderImageView.setImageResource(R.drawable.ic_female_24)
-                    //    }
-
-                   //     Picasso.get().load(body?.image).into(headerImageView)
-                 //   } else {
-                  //      Toast.makeText(this@MainActivity,"not success call to the network",Toast.LENGTH_SHORT).show()
-                  //  }
-              //  }
-           // } catch (t: Throwable) {
-            //    Log.i("MainActivity", t.message ?: "Null Throwable")
-           // }
-       // }
-
 
     }
 }}
