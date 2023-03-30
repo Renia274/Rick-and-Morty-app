@@ -12,13 +12,13 @@ import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: SharedViewModel
+    private lateinit var viewModel: MyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
 
         // Call refreshCharacter() method with the character id you want to display
         viewModel.refreshCharacter(1)

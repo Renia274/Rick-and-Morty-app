@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class SharedViewModel:ViewModel(){
+class MyViewModel:ViewModel(){
 
     private val repository = SharedRepository()
     //live data for network response
