@@ -24,8 +24,10 @@
         </activity>
 
         <meta-data
+
             android:name="android.app.lib_name"
             android:value="" />
+
     </application>
 
 </manifest>
