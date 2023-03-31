@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_light_background"
     tools:context=".MainActivity">
 
     <androidx.cardview.widget.CardView
@@ -15,7 +13,7 @@
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
-        app:layout_constraintBottom_toBottomOf="@id/SpeciesTextView"
+        app:layout_constraintBottom_toBottomOf="@id/SpeciesLabelTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/SpeciesLabelTextView"
@@ -26,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            tools:src="@tools:sample/backgrounds/scenic[4]" />
+            tools:src="@tools:sample/backgrounds/scenic[6]" />
 
     </androidx.cardview.widget.CardView>
 
@@ -63,8 +61,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/nameTextView"
         app:srcCompat="@drawable/ic_male_24" />
-
-
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/OriginLabelTextView"
@@ -151,3 +147,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
