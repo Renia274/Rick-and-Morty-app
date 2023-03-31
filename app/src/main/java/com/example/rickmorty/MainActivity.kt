@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
 
-        // Call refreshCharacter() method with the character id you want to display
+        // display a character based on  based on its id
         viewModel.refreshCharacter(1)
 
         val nameTextView = findViewById<TextView>(R.id.nameTextView)
@@ -30,7 +30,10 @@ class MainActivity : AppCompatActivity() {
         val speciesTextView = findViewById<TextView>(R.id.SpeciesTextView)
         val genderImageView = findViewById<ImageView>(R.id.genderImageView)
 
+        // Observe the character live data for any updates
         viewModel.characterLiveData.observe(this) { response ->
+
+            // If the response is null, display a message
             if (response == null) {
                 Toast.makeText(this@MainActivity, "Not able to fetch the data", Toast.LENGTH_SHORT).show()
                 return@observe
@@ -50,12 +53,14 @@ class MainActivity : AppCompatActivity() {
             genderImageView.visibility = View.VISIBLE
             headerImageView.visibility = View.VISIBLE
 
+            // Set the gender image based on the response
             if (response.gender.equals("male", ignoreCase = true)) {
                 genderImageView.setImageResource(R.drawable.ic_male_24)
             } else {
                 genderImageView.setImageResource(R.drawable.ic_female_24)
             }
 
+            //loads the character's image
             Picasso.get().load(response.image).into(headerImageView)
 
         }

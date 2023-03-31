@@ -2,59 +2,47 @@ package com.example.rickmorty
 
 import com.squareup.moshi.Json
 
+// This data class represents a response from the Rick and Morty API
 data class ApiCharacterResponse(
 
-	@Json(name="image")
-	val image: String? = null,
+    // The URL of the character's image
+    @Json(name = "image") val image: String? = null,
 
-	@Json(name="gender")
-	val gender: String? = null,
+    @Json(name = "gender") val gender: String? = null,
 
-	@Json(name="species")
-	val species: String? = null,
+    @Json(name = "species") val species: String? = null,
 
-	@Json(name="created")
-	val created: String? = null,
+    // The date and time when the character was created
+    @Json(name = "created") val created: String? = null,
 
-	@Json(name="origin")
-	val origin: Origin? = null,
+    // The character's place of origin
+    @Json(name = "origin") val origin: Origin? = null,
 
-	@Json(name="name")
-	val name: String? = null,
+    // The name of the character
+    @Json(name = "name") val name: String? = null,
 
-	@Json(name="location")
-	val location: Location? = null,
+    // The ID of the character
+    @Json(name = "id") val id: Int? = null,
 
-	@Json(name="episode")
-	val episode: List<String?>? = null,
+    // The type of the character
+    @Json(name = "type") val type: String? = null,
 
-	@Json(name="id")
-	val id: Int? = null,
+    // The URL of the Rick and Morty API endpoint that provides information about the character
+    @Json(name = "url") val url: String? = null,
 
-	@Json(name="type")
-	val type: String? = null,
+    // The status of the character,for example alive, dead, unknown
+    @Json(name = "status") val status: String? = null,
 
-	@Json(name="url")
-	val url: String? = null,
-
-	@Json(name="status")
-	val status: String? = null
+    //error message for unsuccessful request
+    val message: String? = null
 )
 
-data class Location(
-
-	@Json(name="name")
-	val name: String? = null,
-
-	@Json(name="url")
-	val url: String? = null
-)
-
+// This data class represents the place of origin of a character
 data class Origin(
 
-	@Json(name="name")
-	val name: String? = null,
+    // The name of the place of origin
+    @Json(name = "name") val name: String? = null,
 
-	@Json(name="url")
-	val url: String? = null
+    // The URL of the Rick and Morty API endpoint that provides information about the place of origin
+    @Json(name = "url") val url: String? = null
 )
