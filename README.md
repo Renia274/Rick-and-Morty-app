@@ -8,7 +8,7 @@ To get started with the Rick and Morty app, you'll need to follow these steps:
 
     Clone the repository: git clone https://github.com/Renia274/Rick-and-Morty-app.git
     Install Android Studio 
-    Start the app: For Android Studio you need to create a device(e.g. Google Pixel 5 or Google Pixel 6 with Tiramisu Android version).After the creation of the device you need to run the     whole application(app).
+    Start the app: For Android Studio you need to create a device(e.g. Google Pixel 5 or Google Pixel 6 with Tiramisu Android version).After the creation of the device you need to run th whole application(app).
 
 
 Usage
