@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="todo" />
+    <string name="release_date" />
+    <string name="return_from_seach" />
+    <string name="search" />
+    <string name="search_episode" />
+    <string name="rnm_image" />
+    <string name="location">Location:</string>
+</resources>

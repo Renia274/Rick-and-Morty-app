@@ -1,0 +1,29 @@
+[33mcommit ab31477f6f2165aefe1dd7da142d315f477f9ab9[m[33m ([m[1;36mHEAD[m[33m)[m
+Author: Dioleti Renia <reniadiol3@gmail.com>
+Date:   Fri Mar 31 16:18:17 2023 +0300
+
+    add error message to api character response
+
+[33mcommit d14ed519d5d00e4e943cabfe99ad2f8906fe9075[m
+Author: Dioleti Renia <reniadiol3@gmail.com>
+Date:   Fri Mar 31 00:20:49 2023 +0300
+
+    change dependency file
+
+[33mcommit b83a1e90fb59f4856df04f14238c0e3a9a306992[m
+Author: Dioleti Renia <reniadiol3@gmail.com>
+Date:   Thu Mar 30 23:30:18 2023 +0300
+
+    display characters in cardview
+
+[33mcommit 2724de6556d485f9aad507db726b73b86d07eba9[m
+Author: Dioleti Renia <reniadiol3@gmail.com>
+Date:   Thu Mar 30 22:47:22 2023 +0300
+
+    extra
+
+[33mcommit 4b378f96a4e4affa0f5bcfc5bb7d4f0db3009af0[m
+Author: Dioleti Renia <reniadiol3@gmail.com>
+Date:   Tue Mar 28 21:09:46 2023 +0300
+
+    init
