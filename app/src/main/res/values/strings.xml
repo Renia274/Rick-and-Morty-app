@@ -4,5 +4,16 @@
     <string name="enter_text_here">Enter text here</string>
     <string name="origin">Origin:</string>
     <string name="species">Species:</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="todo" />
+    <string name="release_date" />
+    <string name="characters" />
+    <string name="search_characters" />
+    <string name="return_from_seach" />
+    <string name="search" />
+    <string name="search_episode" />
+    <string name="rnm_image" />
+    <string name="location">Location:</string>
 
 </resources>

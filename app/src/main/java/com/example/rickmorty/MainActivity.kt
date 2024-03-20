@@ -1,68 +1,128 @@
 package com.example.rickmorty
 
+
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.AbsListView
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.squareup.picasso.Picasso
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.rickmorty.activities.EpisodeActivity
+import com.example.rickmorty.adapters.EpisodesAdapter
+import com.example.rickmorty.api.NetworkLayer
+import com.example.rickmorty.listeners.EpisodeClickListener
+import com.example.rickmorty.repository.RnMRepository
+import com.example.rickmorty.api.services.RnMService
+import com.example.rickmorty.databinding.ActivityMainBinding
+import com.example.rickmorty.viewModel.MainViewModel
+import com.example.rickmorty.viewModel.factory.MainViewModelFactory
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), EpisodeClickListener {
+    lateinit var viewModel: MainViewModel
+    private lateinit var binding: ActivityMainBinding
+    var isScrolling:Boolean = false
+    var totalRows: Int? = null
+    var currentRow : Int? = null
+    var scrolledRows: Int? = null
 
-    private lateinit var viewModel: MyViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // display a character based on  based on its id
-        viewModel.refreshCharacter(1)
 
-        val nameTextView = findViewById<TextView>(R.id.nameTextView)
-        val headerImageView = findViewById<ImageView>(R.id.headerImageView)
-        val aliveTextView = findViewById<TextView>(R.id.aliveTextView)
-        val originTextView = findViewById<TextView>(R.id.OriginTextView)
-        val speciesTextView = findViewById<TextView>(R.id.SpeciesTextView)
-        val genderImageView = findViewById<ImageView>(R.id.genderImageView)
 
-        // Observe the character live data for any updates
-        viewModel.characterLiveData.observe(this) { response ->
+        val rnmService = NetworkLayer.getInstance().create(RnMService::class.java)
+        val rnmRepository = RnMRepository(rnmService)
+        viewModel = ViewModelProvider(this, MainViewModelFactory(rnmRepository))[MainViewModel::class.java]
+        val layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = layoutManager
+        fetchData(1)
 
-            // If the response is null, display a message
-            if (response == null) {
-                Toast.makeText(this@MainActivity, "Not able to fetch the data", Toast.LENGTH_SHORT).show()
-                return@observe
-            }
+        viewModel.allEpisodesLivedata.observe(this) {
+            viewModel.allEpisodes.addAll(it)
+            binding.returnSearch.visibility = View.GONE
+            binding.recyclerView.adapter = EpisodesAdapter(viewModel.allEpisodes, this)
 
-            // Update the UI views with the character data
-            nameTextView.text = response.name
-            aliveTextView.text = response.status
-            speciesTextView.text = response.species
-            originTextView.text = response.origin?.name
-
-            // Set visibility of views to make sure they are visible
-            nameTextView.visibility = View.VISIBLE
-            aliveTextView.visibility = View.VISIBLE
-            speciesTextView.visibility = View.VISIBLE
-            originTextView.visibility = View.VISIBLE
-            genderImageView.visibility = View.VISIBLE
-            headerImageView.visibility = View.VISIBLE
-
-            // Set the gender image based on the response
-            if (response.gender.equals("male", ignoreCase = true)) {
-                genderImageView.setImageResource(R.drawable.ic_male_24)
-            } else {
-                genderImageView.setImageResource(R.drawable.ic_female_24)
-            }
-
-            //loads the character's image
-            Picasso.get().load(response.image).into(headerImageView)
+            binding.progressBar.visibility = View.GONE
 
         }
+
+        viewModel.episodeBySearch.observe(this) {
+            binding.returnSearch.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.GONE
+            binding.recyclerView.adapter = EpisodesAdapter(it, this)
+
+        }
+
+
+        binding.recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                    isScrolling = true
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                currentRow = layoutManager.childCount
+                totalRows = layoutManager.itemCount
+                scrolledRows = layoutManager.findFirstVisibleItemPosition()
+
+                if(isScrolling && (currentRow!! + scrolledRows!! ==totalRows) && totalRows!! <viewModel.totalEpisodes){
+                    isScrolling = false
+                    fetchData(totalRows!! +1)
+                }
+            }
+        })
+
+
+
+        binding.searchButton.setOnClickListener {
+            fetchSearch(binding.searchText)
+
+
+        }
+        binding.returnSearch.setOnClickListener {
+            viewModel.allEpisodes.clear()
+            binding.searchText.text.clear()
+            fetchData(1)
+        }
+    }
+
+
+
+    private fun fetchData(startEpisode: Int) {
+        binding.progressBar.visibility = View.VISIBLE
+        viewModel.fetchData(startEpisode)
+
+
+    }
+
+    private fun fetchSearch(tv:EditText) {
+        val searchText = tv.text.toString()
+        if(searchText.isNotEmpty()){
+            viewModel.allEpisodes.clear()
+            binding.returnSearch.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            viewModel.getEpisodeBySearch(searchText)
+        }
+
+    }
+
+
+
+    override fun onEpisodeCLickListener(id: Int) {
+        val intent = Intent(this, EpisodeActivity::class.java)
+        intent.putExtra("id",id)
+        startActivity(intent)
     }
 }

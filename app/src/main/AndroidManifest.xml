@@ -23,10 +23,23 @@
             </intent-filter>
         </activity>
 
-        <meta-data
+        <activity
+            android:name=".activities.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="fullSensor">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            android:name="android.app.lib_name"
-            android:value="" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.EpisodeActivity"
+            android:exported="true"
+            android:screenOrientation="fullSensor" />
+
+
 
     </application>
 
