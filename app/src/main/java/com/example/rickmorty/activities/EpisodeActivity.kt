@@ -119,7 +119,7 @@ class EpisodeActivity : AppCompatActivity() {
 
         // Load the GIF using Glide into the ImageView
         val gifImageView = findViewById<ImageView>(com.example.rickmorty.R.id.animatedGifImageView)
-        gifImageView.setVisibility(View.VISIBLE) // To make it visible
+        gifImageView.setVisibility(View.VISIBLE)
 
 
 
