@@ -17,10 +17,11 @@ import kotlinx.coroutines.launch
 class EpisodeViewModel(private val repository: RnMRepository): ViewModel() {
     var characterLiveData = MutableLiveData<CharacterList>()
     var episodeData  = MutableLiveData<EpisodeInfo>()
-    val genders = listOf("Female","Male")
+    val genders = listOf("Female","Male","Genderless","Unknown")
     val charactersOfEpisode = mutableListOf<String>()
     val characterUrlLiveData = MutableLiveData<List<String>>()
     var filteredCharacter = mutableListOf<CharacterInfo>()
+
     val characterLocationLiveData = MutableLiveData<String>()
 
     fun fetchCharacterLocation(characterId: Int) {

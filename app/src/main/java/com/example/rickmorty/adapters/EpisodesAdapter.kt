@@ -8,13 +8,17 @@ import com.example.rickmorty.data.EpisodeInfo
 import com.example.rickmorty.databinding.EpisodeListItemBinding
 import com.example.rickmorty.listeners.EpisodeClickListener
 
-class EpisodesAdapter(val data: List<EpisodeInfo>, private val clickListener: EpisodeClickListener): RecyclerView.Adapter<EpisodesAdapter.ViewHolder>() {
+class EpisodesAdapter(
+    val data: List<EpisodeInfo>,
+    private val clickListener: EpisodeClickListener
+) : RecyclerView.Adapter<EpisodesAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = EpisodeListItemBinding.bind(itemView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = EpisodeListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            EpisodeListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding.root)
     }
 
@@ -27,6 +31,6 @@ class EpisodesAdapter(val data: List<EpisodeInfo>, private val clickListener: Ep
     }
 
     override fun getItemCount(): Int {
-        return if(data.isNullOrEmpty()) 0 else data.size
+        return if (data.isNullOrEmpty()) 0 else data.size
     }
 }

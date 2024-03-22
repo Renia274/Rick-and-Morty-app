@@ -51,7 +51,6 @@
         app:layout_constraintTop_toBottomOf="@id/episodeTitle"
         app:layout_constraintVertical_bias="1.0">
 
-        <!-- ImageView to display the GIF -->
         <ImageView
             android:id="@+id/animatedGifImageView"
             android:layout_width="match_parent"
@@ -116,6 +115,7 @@
         android:textColor="@color/secondart_text_color"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
@@ -128,6 +128,7 @@
         android:layout_marginEnd="8dp"
         android:background="#7F222834"
         android:drawableStart="@android:drawable/ic_menu_search"
+        android:drawableEnd="@android:drawable/ic_menu_close_clear_cancel"
         android:drawablePadding="4dp"
         android:ems="10"
         android:hint="@string/search_characters"
@@ -135,6 +136,7 @@
         android:inputType="textPersonName"
         android:textColor="@color/secondart_text_color"
         app:layout_constraintEnd_toStartOf="@+id/genderSpinner"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 

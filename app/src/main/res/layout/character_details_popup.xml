@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Character Name -->
+    <TextView
+        android:id="@+id/charName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Character Image with Name -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="8dp">
+
+        <!-- Character Image wrapped in FrameLayout -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/charImage"
+                android:layout_width="124dp"
+                android:layout_height="248dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
+
+        </FrameLayout>
+
+        <!-- Character Name (below the image) -->
+        <TextView
+            android:id="@+id/charNameBelowImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+    <!-- Origin -->
+    <TextView
+        android:id="@+id/charOrigin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"/>
+
+    <!-- Species -->
+    <TextView
+        android:id="@+id/charSpecies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"/>
+
+    <!-- Location -->
+    <TextView
+        android:id="@+id/charLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"/>
+
+</LinearLayout>
