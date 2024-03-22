@@ -13,15 +13,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.rickmorty.activities.EpisodeActivity
 import com.example.rickmorty.adapters.EpisodesAdapter
 import com.example.rickmorty.api.NetworkLayer
-import com.example.rickmorty.listeners.EpisodeClickListener
 import com.example.rickmorty.repository.RnMRepository
 import com.example.rickmorty.api.services.RnMService
 import com.example.rickmorty.databinding.ActivityMainBinding
+import com.example.rickmorty.navigation.EpisodeNavClickListener
 import com.example.rickmorty.viewModel.MainViewModel
 import com.example.rickmorty.viewModel.factory.MainViewModelFactory
 
 
-class MainActivity : AppCompatActivity(), EpisodeClickListener {
+class MainActivity : AppCompatActivity(), EpisodeNavClickListener {
     lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     var isScrolling:Boolean = false
@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(), EpisodeClickListener {
 
 
 
-    override fun onEpisodeCLickListener(id: Int) {
+    override fun onEpisodeNavCLick(id: Int) {
         val intent = Intent(this, EpisodeActivity::class.java)
         intent.putExtra("id",id)
         startActivity(intent)

@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickmorty.data.EpisodeInfo
 import com.example.rickmorty.databinding.EpisodeListItemBinding
-import com.example.rickmorty.listeners.EpisodeClickListener
+import com.example.rickmorty.navigation.EpisodeNavClickListener
 
 class EpisodesAdapter(
     val data: List<EpisodeInfo>,
-    private val clickListener: EpisodeClickListener
+    private val clickListener: EpisodeNavClickListener
 ) : RecyclerView.Adapter<EpisodesAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = EpisodeListItemBinding.bind(itemView)
@@ -26,11 +26,11 @@ class EpisodesAdapter(
         holder.binding.episodeTitle.setText(data[position].name)
         holder.binding.episodeNumber.setText(data[position].episode)
         holder.itemView.setOnClickListener {
-            clickListener.onEpisodeCLickListener(data[position].id)
+            clickListener.onEpisodeNavCLick(data[position].id)
         }
     }
 
     override fun getItemCount(): Int {
-        return if (data.isNullOrEmpty()) 0 else data.size
+        return if (data.isEmpty()) 0 else data.size
     }
 }
