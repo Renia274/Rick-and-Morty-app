@@ -1,14 +1,14 @@
+package com.example.rickmorty.activities
+
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rickmorty.MainActivity
 import com.example.rickmorty.R
-import com.example.rickmorty.navigation.SplashCallback
+import android.media.MediaPlayer
 
-
-class SplashActivity : AppCompatActivity(), SplashCallback {
+class SplashActivity : AppCompatActivity() {
 
     private val SPLASH_DELAY: Long = 3000 // 3 seconds
     private lateinit var mediaPlayer: MediaPlayer
@@ -28,8 +28,9 @@ class SplashActivity : AppCompatActivity(), SplashCallback {
             // Stop the sound playback
             mediaPlayer.stop()
             mediaPlayer.release()
-            // Notify the callback that the splash delay is over
-            onSplashFinished()
+            // Start the next activity after the splash delay
+            startActivity(Intent(this, MainActivity::class.java))
+            finish() // Close the splash activity so that it's not displayed when back button is pressed
         }, SPLASH_DELAY)
     }
 
@@ -37,11 +38,5 @@ class SplashActivity : AppCompatActivity(), SplashCallback {
         super.onDestroy()
         // Release the MediaPlayer resources
         mediaPlayer.release()
-    }
-
-   override fun onSplashFinished() {
-        // Start the next activity after the splash delay
-        startActivity(Intent(this, MainActivity::class.java))
-        finish() // Close the splash activity so that it's not displayed when back button is pressed
     }
 }

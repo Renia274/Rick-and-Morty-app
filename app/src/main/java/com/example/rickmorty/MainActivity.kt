@@ -122,7 +122,9 @@ class MainActivity : AppCompatActivity(), EpisodeNavClickListener {
 
     override fun onEpisodeNavCLick(id: Int) {
         val intent = Intent(this, EpisodeActivity::class.java)
-        intent.putExtra("id",id)
+        intent.putExtra("id", id)
         startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right)
     }
+
 }

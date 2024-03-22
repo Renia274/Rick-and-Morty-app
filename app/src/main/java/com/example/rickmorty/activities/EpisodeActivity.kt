@@ -62,8 +62,14 @@ class EpisodeActivity : AppCompatActivity() {
         }
 
         binding.progressBar2.visibility = View.VISIBLE
+
         binding.backButton.setOnClickListener {
+            // Call super.onBackPressed() to handle back navigation
             super.onBackPressed()
+            // Apply slide animation
+            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+
+
         }
 
         binding.genderSpinner.adapter = ArrayAdapter(
