@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class EpisodeViewModel(private val repository: RnMRepository): ViewModel() {
     var characterLiveData = MutableLiveData<CharacterList>()
     var episodeData  = MutableLiveData<EpisodeInfo>()
-    val genders = listOf("Female","Male","Genderless","Unknown")
+    val genders = listOf("-","Female","Male")
     val charactersOfEpisode = mutableListOf<String>()
     val characterUrlLiveData = MutableLiveData<List<String>>()
     var filteredCharacter = mutableListOf<CharacterInfo>()
@@ -85,15 +85,37 @@ class EpisodeViewModel(private val repository: RnMRepository): ViewModel() {
         }
     }
 
-    fun filterCharacters(selectedItem: String, text: String) {
-        if(text.isEmpty()){
-            filteredCharacter.clear()
-            filterCharacterByGender(selectedItem)
-        }else{
-            filteredCharacter.clear()
-            filterCharacterByNameAndGender(selectedItem,text)
-        }
 
+
+
+    fun filterCharacters(selectedItem: String, text: String) {
+        if (selectedItem == "-") {
+            // When "-" is selected, fetch all characters
+            fetchAllCharacters()
+        } else {
+            if (text.isEmpty()) {
+                filteredCharacter.clear()
+                filterCharacterByGender(selectedItem)
+            } else {
+                filteredCharacter.clear()
+                filterCharacterByNameAndGender(selectedItem, text)
+            }
+        }
     }
+
+    private fun fetchAllCharacters() {
+        viewModelScope.launch(Dispatchers.IO) {
+            filteredCharacter.clear()
+            for (url in charactersOfEpisode) {
+                val id = url.split("/")
+                val result = repository.getCharacter(id[id.size - 1].toInt())
+                if (result.isSuccessful) {
+                    filteredCharacter.add(result.body()!!)
+                }
+            }
+            characterLiveData.postValue(CharacterList(Info(0, "", 0, ""), filteredCharacter))
+        }
+    }
+
 
 }

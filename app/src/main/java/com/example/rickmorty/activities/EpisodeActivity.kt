@@ -58,7 +58,7 @@ class EpisodeActivity : AppCompatActivity() {
 
 
         binding.searchText.setOnClickListener {
-            binding.searchText.text.clear()
+            binding.searchText.text?.clear()
         }
 
         binding.progressBar2.visibility = View.VISIBLE
@@ -88,7 +88,7 @@ class EpisodeActivity : AppCompatActivity() {
                     )
                     binding.progressBar2.visibility = View.VISIBLE
                 }
-                binding.searchText.text.clear()
+                binding.searchText.text?.clear()
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {}
