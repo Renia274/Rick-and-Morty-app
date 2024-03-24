@@ -15,5 +15,6 @@
     <string name="search_episode" />
     <string name="rnm_image" />
     <string name="location">Location:</string>
+    <string name="searching">🔍</string>
 
 </resources>
