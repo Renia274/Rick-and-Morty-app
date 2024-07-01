@@ -14,14 +14,14 @@ import kotlinx.coroutines.launch
 
 
 
-class EpisodeViewModel(private val repository: RnMRepository): ViewModel() {
+
+class EpisodeViewModel(private val repository: RnMRepository) : ViewModel() {
     var characterLiveData = MutableLiveData<CharacterList>()
-    var episodeData  = MutableLiveData<EpisodeInfo>()
-    val genders = listOf("-","Female","Male")
+    var episodeData = MutableLiveData<EpisodeInfo>()
+    val genders = listOf("-", "Female", "Male")
     val charactersOfEpisode = mutableListOf<String>()
     val characterUrlLiveData = MutableLiveData<List<String>>()
     var filteredCharacter = mutableListOf<CharacterInfo>()
-
     val characterLocationLiveData = MutableLiveData<String>()
 
     fun fetchCharacterLocation(characterId: Int) {
@@ -36,86 +36,58 @@ class EpisodeViewModel(private val repository: RnMRepository): ViewModel() {
         }
     }
 
-
-
     fun fetchEpisodeData(episodeId: Int) {
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getSingleEpisode(episodeId)
-            if(result.isSuccessful) {
+            if (result.isSuccessful) {
                 episodeData.postValue(result.body())
             }
-
-        }
-
-    }
-
-    fun filterCharacterByGender(gender: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            for(url in charactersOfEpisode){
-                val id = url.split("/")
-                val result = repository.getCharacter(id[id.size-1].toInt())
-                if (result.isSuccessful){
-                    filteredCharacter.add(result.body()!!)
-                }
-            }
-            val genderFilteredCharacters = filteredCharacter.filter{
-                it.gender == gender
-            }
-
-            characterLiveData.postValue(CharacterList(Info(0,"",0,""),genderFilteredCharacters))
-            filteredCharacter.clear()
-
-
-        }
-
-    }
-    fun filterCharacterByNameAndGender(gender: String,name:String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            filteredCharacter.clear()
-            val result = repository.filterCharacterByNameAndGender(gender, name)
-            if (result.isSuccessful) {
-                val info = result.body()!!
-                for( character in info.results)
-                    if( character.url in charactersOfEpisode){
-                        filteredCharacter.add(character)
-                    }
-            }
-            characterLiveData.postValue(CharacterList(Info(0,"",0,""),filteredCharacter))
-
         }
     }
-
-
-
 
     fun filterCharacters(selectedItem: String, text: String) {
-        if (selectedItem == "-") {
-            // When "-" is selected, fetch all characters
-            fetchAllCharacters()
-        } else {
-            if (text.isEmpty()) {
-                filteredCharacter.clear()
-                filterCharacterByGender(selectedItem)
+        viewModelScope.launch(Dispatchers.IO) {
+            if (selectedItem == "-") {
+                fetchAllCharacters(text)
             } else {
-                filteredCharacter.clear()
-                filterCharacterByNameAndGender(selectedItem, text)
+                filterCharacterByGenderAndName(selectedItem, text)
             }
         }
     }
 
-    private fun fetchAllCharacters() {
+    private fun fetchAllCharacters(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
             filteredCharacter.clear()
             for (url in charactersOfEpisode) {
-                val id = url.split("/")
-                val result = repository.getCharacter(id[id.size - 1].toInt())
+                val id = url.split("/").last().toInt()
+                val result = repository.getCharacter(id)
                 if (result.isSuccessful) {
-                    filteredCharacter.add(result.body()!!)
+                    val character = result.body()!!
+                    if (character.name!!.contains(text, ignoreCase = true)) {
+                        filteredCharacter.add(character)
+                    }
                 }
             }
+            filteredCharacter.sortBy { it.name }
             characterLiveData.postValue(CharacterList(Info(0, "", 0, ""), filteredCharacter))
         }
     }
 
-
+    private fun filterCharacterByGenderAndName(gender: String, text: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            filteredCharacter.clear()
+            for (url in charactersOfEpisode) {
+                val id = url.split("/").last().toInt()
+                val result = repository.getCharacter(id)
+                if (result.isSuccessful) {
+                    val character = result.body()!!
+                    if (character.gender == gender && character.name!!.contains(text, ignoreCase = true)) {
+                        filteredCharacter.add(character)
+                    }
+                }
+            }
+            filteredCharacter.sortBy { it.name }
+            characterLiveData.postValue(CharacterList(Info(0, "", 0, ""), filteredCharacter))
+        }
+    }
 }

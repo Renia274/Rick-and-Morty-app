@@ -10,11 +10,9 @@ import retrofit2.Response
 
 class RnMRepository(private val rnmService: RnMService) {
 
-
     suspend fun getSingleEpisode(id: Int): Response<EpisodeInfo> {
         return rnmService.getSingleEpisode(id)
     }
-
 
     suspend fun getEpisodeBySearch(p0: String): Response<EpisodeList> {
         return rnmService.getEpisodeBySearch(p0)
@@ -26,10 +24,7 @@ class RnMRepository(private val rnmService: RnMService) {
 
     }
 
-    suspend fun filterCharacterByNameAndGender(
-        gender: String,
-        name: String
-    ): Response<CharacterList> {
+    suspend fun filterCharacterByNameAndGender(gender: String, name: String): Response<CharacterList> {
         return rnmService.filterCharacterByNameAndGender(gender, name)
     }
 
@@ -40,6 +35,4 @@ class RnMRepository(private val rnmService: RnMService) {
     suspend fun getCharacterLocation(characterId: Int): Response<LocationInfo> {
         return rnmService.getCharacterLocation(characterId)
     }
-
-
 }
