@@ -48,10 +48,29 @@ class EpisodeViewModel(private val repository: RnMRepository) : ViewModel() {
     fun filterCharacters(selectedItem: String, text: String) {
         viewModelScope.launch(Dispatchers.IO) {
             if (selectedItem == "-") {
-                fetchAllCharacters(text)
+                filterCharacterByName(text)
             } else {
                 filterCharacterByGenderAndName(selectedItem, text)
             }
+        }
+    }
+
+
+    private fun filterCharacterByName(text: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            filteredCharacter.clear()
+            for (url in charactersOfEpisode) {
+                val id = url.split("/").last().toInt()
+                val result = repository.getCharacter(id)
+                if (result.isSuccessful) {
+                    val character = result.body()!!
+                    if (character.name!!.contains(text, ignoreCase = true)) {
+                        filteredCharacter.add(character)
+                    }
+                }
+            }
+            filteredCharacter.sortBy { it.name }
+            characterLiveData.postValue(CharacterList(Info(0, "", 0, ""), filteredCharacter))
         }
     }
 

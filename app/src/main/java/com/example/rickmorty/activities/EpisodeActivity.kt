@@ -1,6 +1,5 @@
 package com.example.rickmorty.activities
 
-
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
@@ -25,12 +24,10 @@ import com.example.rickmorty.repository.RnMRepository
 import com.example.rickmorty.viewModel.EpisodeViewModel
 import com.example.rickmorty.viewModel.factory.EpisodeViewModelFactory
 
-
-
 class EpisodeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEpisodeBinding
-    private var isInitial = true
     private lateinit var episodeViewModel: EpisodeViewModel
+    private var isInitial = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,10 +40,26 @@ class EpisodeActivity : AppCompatActivity() {
         val rnmService = NetworkLayer.getInstance().create(RnMService::class.java)
         val rnmRepository = RnMRepository(rnmService)
 
-        episodeViewModel = ViewModelProvider(this, EpisodeViewModelFactory(rnmRepository))[EpisodeViewModel::class.java]
-        episodeViewModel.fetchEpisodeData(episodeId)
+        episodeViewModel = ViewModelProvider(this, EpisodeViewModelFactory(rnmRepository))
+            .get(EpisodeViewModel::class.java)
+
+        setupViews()
+        observeViewModel(episodeId)
+        setupListeners()
+    }
+
+    private fun setupViews() {
         binding.characterRV.layoutManager = LinearLayoutManager(this)
 
+        binding.genderSpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            episodeViewModel.genders
+        )
+    }
+
+    private fun observeViewModel(episodeId: Int) {
+        episodeViewModel.fetchEpisodeData(episodeId)
         episodeViewModel.episodeData.observe(this) { episodeInfo ->
             binding.episodeNumber.text = episodeInfo.episode
             binding.episodeTitle.text = episodeInfo.name
@@ -54,72 +67,6 @@ class EpisodeActivity : AppCompatActivity() {
             binding.characterCount.text = episodeInfo.characters.size.toString()
             episodeViewModel.charactersOfEpisode.addAll(episodeInfo.characters)
             episodeViewModel.characterUrlLiveData.value = episodeInfo.characters
-        }
-
-
-        binding.searchText.setOnClickListener {
-            binding.searchText.text?.clear()
-        }
-
-        binding.progressBar2.visibility = View.VISIBLE
-
-        binding.backButton.setOnClickListener {
-            super.onBackPressed()
-            // Apply slide animation
-            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
-
-
-        }
-
-        binding.genderSpinner.adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            episodeViewModel.genders
-        )
-
-        binding.genderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (isInitial) {
-                    isInitial = false
-                } else {
-                    episodeViewModel.filterCharacters(
-                        p0!!.getItemAtPosition(p2).toString(),
-                        ""
-                    )
-                    binding.progressBar2.visibility = View.VISIBLE
-                }
-                binding.searchText.text?.clear()
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-        }
-
-        binding.searchText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!p0.isNullOrEmpty()) {
-                    binding.progressBar2.visibility = View.VISIBLE
-                    episodeViewModel.filterCharacters(
-                        binding.genderSpinner.selectedItem.toString(),
-                        binding.searchText.text.toString()
-                    )
-                } else {
-                    episodeViewModel.filterCharacters(
-                        binding.genderSpinner.selectedItem.toString(),
-                        binding.searchText.text.toString()
-                    )
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {}
-        })
-
-        episodeViewModel.characterUrlLiveData.observe(this) {
-            episodeViewModel.filterCharacters(
-                binding.genderSpinner.selectedItem.toString(),
-                binding.searchText.text.toString()
-            )
         }
 
         episodeViewModel.characterLiveData.observe(this) { characterList ->
@@ -132,31 +79,74 @@ class EpisodeActivity : AppCompatActivity() {
             binding.progressBar2.visibility = View.GONE
         }
 
-        val gifImageView = findViewById<ImageView>(R.id.animatedGifImageView)
-        gifImageView.setVisibility(View.VISIBLE)
+        episodeViewModel.characterUrlLiveData.observe(this) {
+            episodeViewModel.filterCharacters(
+                binding.genderSpinner.selectedItem.toString(),
+                binding.searchText.text.toString()
+            )
+        }
+    }
+
+    private fun setupListeners() {
+        binding.searchText.setOnClickListener {
+            binding.searchText.text?.clear()
+        }
+
+        binding.backButton.setOnClickListener {
+            super.onBackPressed()
+            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+        }
+
+        binding.genderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                if (!isInitial) {
+                    episodeViewModel.filterCharacters(
+                        p0!!.getItemAtPosition(p2).toString(),
+                        binding.searchText.text.toString()
+                    )
+                    binding.progressBar2.visibility = View.VISIBLE
+                } else {
+                    isInitial = false
+                }
+                binding.searchText.text?.clear()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+        }
+
+        binding.searchText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                binding.progressBar2.visibility = View.VISIBLE
+                episodeViewModel.filterCharacters(
+                    binding.genderSpinner.selectedItem.toString(),
+                    binding.searchText.text.toString()
+                )
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
     }
 
     private fun showCharacterDetails(character: CharacterInfo) {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.character_details_popup)
 
-        // Initialize views in the dialog
         val characterNameTextView = dialog.findViewById<TextView>(R.id.charName)
         val characterOriginTextView = dialog.findViewById<TextView>(R.id.charOrigin)
         val characterSpeciesTextView = dialog.findViewById<TextView>(R.id.charSpecies)
         val characterLocationTextView = dialog.findViewById<TextView>(R.id.charLocation)
         val characterImageView = dialog.findViewById<ImageView>(R.id.charImage)
 
-        // Set character details in the dialog
         characterNameTextView.text = character.name
-        characterOriginTextView.text = "Origin: ${character.origin?.name}"
+        characterOriginTextView.text = "Origin: ${character.origin?.name ?: "Unknown"}"
         characterSpeciesTextView.text = "Species: ${character.species}"
         characterLocationTextView.text = "Location: ${character.location?.name ?: "Unknown"}"
         Glide.with(this)
             .load(character.image)
             .into(characterImageView)
 
-        // Show the dialog
         dialog.show()
     }
 }
