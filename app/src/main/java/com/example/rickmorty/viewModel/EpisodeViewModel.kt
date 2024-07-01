@@ -54,8 +54,6 @@ class EpisodeViewModel(private val repository: RnMRepository) : ViewModel() {
             }
         }
     }
-
-
     private fun filterCharacterByName(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
             filteredCharacter.clear()
@@ -64,6 +62,7 @@ class EpisodeViewModel(private val repository: RnMRepository) : ViewModel() {
                 val result = repository.getCharacter(id)
                 if (result.isSuccessful) {
                     val character = result.body()!!
+                    // Check if the typed text is contained within the character's name (case insensitive)
                     if (character.name!!.contains(text, ignoreCase = true)) {
                         filteredCharacter.add(character)
                     }
@@ -73,25 +72,6 @@ class EpisodeViewModel(private val repository: RnMRepository) : ViewModel() {
             characterLiveData.postValue(CharacterList(Info(0, "", 0, ""), filteredCharacter))
         }
     }
-
-    private fun fetchAllCharacters(text: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            filteredCharacter.clear()
-            for (url in charactersOfEpisode) {
-                val id = url.split("/").last().toInt()
-                val result = repository.getCharacter(id)
-                if (result.isSuccessful) {
-                    val character = result.body()!!
-                    if (character.name!!.contains(text, ignoreCase = true)) {
-                        filteredCharacter.add(character)
-                    }
-                }
-            }
-            filteredCharacter.sortBy { it.name }
-            characterLiveData.postValue(CharacterList(Info(0, "", 0, ""), filteredCharacter))
-        }
-    }
-
     private fun filterCharacterByGenderAndName(gender: String, text: String) {
         viewModelScope.launch(Dispatchers.IO) {
             filteredCharacter.clear()
